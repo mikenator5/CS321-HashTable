@@ -34,4 +34,12 @@ public abstract class HashTable {
         } while (i == this.table.length);
         return -1;
     }
+
+    protected int positiveMod (int dividend, int divisor) {
+        int quotient = dividend % divisor;
+        if (quotient < 0)
+            quotient += divisor;
+        return quotient;
+    }
+
 }
