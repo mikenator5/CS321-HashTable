@@ -5,6 +5,7 @@ public abstract class HashTable {
     public HashTable(int maxSize) {
         this.table = new HashObject[maxSize];
     }
-    public abstract Object search(Object k);
-    public abstract int insert(Object x);
+    public abstract HashObject search(HashObject k);
+    public abstract int insert(HashObject x);
+    protected abstract int hash(HashObject x, int i);
 }
