@@ -5,7 +5,33 @@ public abstract class HashTable {
     public HashTable(int maxSize) {
         this.table = new HashObject[maxSize];
     }
-    public abstract HashObject search(HashObject k);
-    public abstract int insert(HashObject x);
     protected abstract int hash(HashObject x, int i);
+
+    public HashObject search(HashObject k) {
+        int i = 0;
+        int probe;
+        do {
+            probe = hash(k, i);
+            if (this.table[probe] == k) {
+                return this.table[probe];
+            } else {
+                i++;
+            }
+        } while (i == this.table.length || this.table[probe] == null);
+        return null;
+    }
+
+    public int insert(HashObject x) {
+        int i = 0;
+        do {
+            int probe = hash(x, i);
+            if (this.table[probe] == null) {
+                this.table[probe] = x;
+                return probe;
+            } else {
+                i++;
+            }
+        } while (i == this.table.length);
+        return -1;
+    }
 }
