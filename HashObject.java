@@ -3,6 +3,22 @@ public class HashObject extends Object {
     int frequencyCount;
     int probeCount;
 
+    public int getFrequencyCount() {
+        return frequencyCount;
+    }
+
+    public void incrementFrequencyCount() {
+        this.frequencyCount++;
+    }
+
+    public int getProbeCount() {
+        return probeCount;
+    }
+
+    public void incrementProbeCount(int probeCount) {
+        this.probeCount++;
+    }
+
     public HashObject(Object key) {
         this.key = key;
         this.frequencyCount = 0;
