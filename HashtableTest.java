@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Random;
 
 public class HashtableTest {
@@ -49,6 +50,23 @@ public class HashtableTest {
         for (int i = 0; i < table.table.length * loadFactor; i++) {
             HashObject tmp = new HashObject(r.nextInt());
             table.insert(tmp);
+        }
+    }
+
+    private static void dateTest() {
+        int[] primes = TwinPrimeGenerator.generateTwinPrime(95500, 96000);
+        if (primes == null) {
+            return;
+        }
+        HashTable linearProbing = new LinearProbing(primes[1]);
+        HashTable doubleHashing = new DoubleHashing(primes[1]);
+        long current = new Date().getTime();
+        for (int i = 0; i < primes[1] * loadFactor; i++) {
+            Date date = new Date(current);
+            HashObject tmp = new HashObject(date);
+            linearProbing.insert(tmp);
+            doubleHashing.insert(tmp);
+            current += 1000;
         }
     }
 
