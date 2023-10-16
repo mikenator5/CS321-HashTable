@@ -5,6 +5,6 @@ public class LinearProbing extends HashTable {
 
     @Override
     protected int hash(HashObject x, int i) {
-        return ((x.hashCode() % this.table.length) + i) % this.table.length;
+        return positiveMod(x.hashCode(), this.table.length);
     }
 }
