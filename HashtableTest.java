@@ -1,6 +1,9 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
+import java.util.Scanner;
 
 public class HashtableTest {
 
@@ -72,6 +75,29 @@ public class HashtableTest {
         }
     }
 
+    private static void stringTest() {
+        int[] primes = TwinPrimeGenerator.generateTwinPrime(95500, 96000);
+        if (primes == null) {
+            return;
+        }
+        HashTable linearProbing = new LinearProbing(primes[1]);
+        HashTable doubleHashing = new DoubleHashing(primes[1]);
+
+        Scanner scanner;
+        try {
+            scanner = new Scanner(new File("word-list.txt"));
+        } catch (FileNotFoundException e) {
+            return;
+        }
+        for (int i = 0; i < primes[1] * loadFactor; i++) {
+            String str = scanner.next();
+            HashObject tmp = new HashObject(str);
+            linearProbing.insert(tmp);
+            doubleHashing.insert(tmp);
+        }
+        System.out.println(Arrays.toString(linearProbing.table));
+    }
+
     public static void main(String[] args) {
         HashtableTest t = new HashtableTest(args);
 
@@ -82,9 +108,11 @@ public class HashtableTest {
                 break;
             case 2:
                 System.out.println("Date objects");
+                dateTest();
                 break;
             case 3:
                 System.out.println("String objects");
+                stringTest();
                 break;
         }
     }
