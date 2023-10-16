@@ -45,11 +45,13 @@ public class HashtableTest {
         if (primes == null) {
             return;
         }
-        HashTable table = new LinearProbing(primes[1]);
+        HashTable linearProbing = new LinearProbing(primes[1]);
+        HashTable doubleHashing = new DoubleHashing(primes[1]);
         Random r = new Random();
-        for (int i = 0; i < table.table.length * loadFactor; i++) {
+        for (int i = 0; i < primes[1] * loadFactor; i++) {
             HashObject tmp = new HashObject(r.nextInt());
-            table.insert(tmp);
+            linearProbing.insert(tmp);
+            doubleHashing.insert(tmp);
         }
     }
 
