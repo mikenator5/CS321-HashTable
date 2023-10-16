@@ -1,7 +1,10 @@
+import java.util.Arrays;
+import java.util.Random;
+
 public class HashtableTest {
 
     int dataSouce;
-    double loadFactor;
+    static double loadFactor;
     int debugLevel;
     public HashtableTest(String[] args) {
         try {
@@ -10,7 +13,7 @@ public class HashtableTest {
                 printUsageAndExit();
             }
 
-            this.loadFactor = Double.parseDouble(args[1]);
+            loadFactor = Double.parseDouble(args[1]);
 
             this.debugLevel = Integer.parseInt(args[2]);
             if (this.debugLevel < 0 || this.debugLevel > 2) {
@@ -36,12 +39,26 @@ public class HashtableTest {
         System.exit(1);
     }
 
+    private static void integerTest() {
+        int[] primes = TwinPrimeGenerator.generateTwinPrime(95500, 96000);
+        if (primes == null) {
+            return;
+        }
+        HashTable table = new LinearProbing(primes[1]);
+        Random r = new Random();
+        for (int i = 0; i < table.table.length * loadFactor; i++) {
+            HashObject tmp = new HashObject(r.nextInt());
+            table.insert(tmp);
+        }
+    }
+
     public static void main(String[] args) {
         HashtableTest t = new HashtableTest(args);
 
         switch (t.dataSouce) {
             case 1:
                 System.out.println("Integer objects");
+                integerTest();
                 break;
             case 2:
                 System.out.println("Date objects");
