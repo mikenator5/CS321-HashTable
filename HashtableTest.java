@@ -1,32 +1,14 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
 public class HashtableTest {
 
-    int dataSouce;
+    static int dataSource;
     static double loadFactor;
-    int debugLevel;
-    public HashtableTest(String[] args) {
-        try {
-            this.dataSouce = Integer.parseInt(args[0]);
-            if (this.dataSouce < 0 || this.dataSouce > 3) {
-                printUsageAndExit();
-            }
-
-            loadFactor = Double.parseDouble(args[1]);
-
-            this.debugLevel = Integer.parseInt(args[2]);
-            if (this.debugLevel < 0 || this.debugLevel > 2) {
-                printUsageAndExit();
-            }
-        } catch (NumberFormatException e) {
-            printUsageAndExit();
-        }
-    }
+    static int debugLevel;
 
     private static void printUsageAndExit() {
         System.out.println("""
@@ -51,7 +33,7 @@ public class HashtableTest {
         HashTable linearProbing = new LinearProbing(primes[1]);
         HashTable doubleHashing = new DoubleHashing(primes[1]);
         Random r = new Random();
-        for (int i = 0; i < primes[1] * loadFactor; i++) {
+        for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
             HashObject tmp = new HashObject(r.nextInt());
             linearProbing.insert(tmp);
             doubleHashing.insert(tmp);
@@ -66,7 +48,7 @@ public class HashtableTest {
         HashTable linearProbing = new LinearProbing(primes[1]);
         HashTable doubleHashing = new DoubleHashing(primes[1]);
         long current = new Date().getTime();
-        for (int i = 0; i < primes[1] * loadFactor; i++) {
+        for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
             Date date = new Date(current);
             HashObject tmp = new HashObject(date);
             linearProbing.insert(tmp);
@@ -89,19 +71,32 @@ public class HashtableTest {
         } catch (FileNotFoundException e) {
             return;
         }
-        for (int i = 0; i < primes[1] * loadFactor; i++) {
+        for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
             String str = scanner.next();
             HashObject tmp = new HashObject(str);
             linearProbing.insert(tmp);
             doubleHashing.insert(tmp);
         }
-        System.out.println(Arrays.toString(linearProbing.table));
     }
 
     public static void main(String[] args) {
-        HashtableTest t = new HashtableTest(args);
+        try {
+            dataSource = Integer.parseInt(args[0]);
+            if (dataSource < 0 || dataSource > 3) {
+                printUsageAndExit();
+            }
 
-        switch (t.dataSouce) {
+            loadFactor = Double.parseDouble(args[1]);
+
+            debugLevel = Integer.parseInt(args[2]);
+            if (debugLevel < 0 || debugLevel > 2) {
+                printUsageAndExit();
+            }
+        } catch (NumberFormatException e) {
+            printUsageAndExit();
+        }
+
+        switch (dataSource) {
             case 1:
                 System.out.println("Integer objects");
                 integerTest();
