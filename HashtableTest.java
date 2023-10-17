@@ -9,6 +9,25 @@ public class HashtableTest {
     static int dataSource;
     static double loadFactor;
     static int debugLevel;
+    static int[] primes;
+
+    private static void handleArgsAndSetup(String[] args) {
+        try {
+            dataSource = Integer.parseInt(args[0]);
+            if (dataSource < 0 || dataSource > 3) {
+                printUsageAndExit();
+            }
+
+            loadFactor = Double.parseDouble(args[1]);
+
+            debugLevel = Integer.parseInt(args[2]);
+            if (debugLevel < 0 || debugLevel > 2) {
+                printUsageAndExit();
+            }
+        } catch (NumberFormatException e) {
+            printUsageAndExit();
+        }
+    }
 
     private static void printUsageAndExit() {
         System.out.println("""
@@ -26,10 +45,6 @@ public class HashtableTest {
     }
 
     private static void integerTest() {
-        int[] primes = TwinPrimeGenerator.generateTwinPrime(95500, 96000);
-        if (primes == null) {
-            return;
-        }
         HashTable linearProbing = new LinearProbing(primes[1]);
         HashTable doubleHashing = new DoubleHashing(primes[1]);
         Random r = new Random();
@@ -41,10 +56,6 @@ public class HashtableTest {
     }
 
     private static void dateTest() {
-        int[] primes = TwinPrimeGenerator.generateTwinPrime(95500, 96000);
-        if (primes == null) {
-            return;
-        }
         HashTable linearProbing = new LinearProbing(primes[1]);
         HashTable doubleHashing = new DoubleHashing(primes[1]);
         long current = new Date().getTime();
@@ -58,10 +69,6 @@ public class HashtableTest {
     }
 
     private static void stringTest() {
-        int[] primes = TwinPrimeGenerator.generateTwinPrime(95500, 96000);
-        if (primes == null) {
-            return;
-        }
         HashTable linearProbing = new LinearProbing(primes[1]);
         HashTable doubleHashing = new DoubleHashing(primes[1]);
 
@@ -80,25 +87,18 @@ public class HashtableTest {
     }
 
     public static void main(String[] args) {
-        try {
-            dataSource = Integer.parseInt(args[0]);
-            if (dataSource < 0 || dataSource > 3) {
-                printUsageAndExit();
-            }
+        handleArgsAndSetup(args);
 
-            loadFactor = Double.parseDouble(args[1]);
-
-            debugLevel = Integer.parseInt(args[2]);
-            if (debugLevel < 0 || debugLevel > 2) {
-                printUsageAndExit();
-            }
-        } catch (NumberFormatException e) {
-            printUsageAndExit();
+        primes = TwinPrimeGenerator.generateTwinPrime(95500, 96000);
+        if (primes == null) {
+            System.exit(1);
         }
 
+        System.out.printf("HashtableTest: Found a twin prime table capacity: %d\n", primes[1]);
+        System.out.print("HashtableTest: Input: ");
         switch (dataSource) {
             case 1:
-                System.out.println("Integer objects");
+                System.out.printf("Integer  Load factor: %.2f\n", loadFactor);
                 integerTest();
                 break;
             case 2:
