@@ -10,9 +10,10 @@ public class HashtableTest {
     static double loadFactor;
     static int debugLevel;
     static int[] primes;
-
+    static HashTable linearProbing;
+    static HashTable doubleHashing;
     private static void handleArgsAndSetup(String[] args) {
-        try {
+        try { // TODO The program should, by default, use debug level 0 if the debug level wasn’t specified on the command line.
             dataSource = Integer.parseInt(args[0]);
             if (dataSource < 0 || dataSource > 3) {
                 printUsageAndExit();
@@ -45,8 +46,6 @@ public class HashtableTest {
     }
 
     private static void integerTest() {
-        HashTable linearProbing = new LinearProbing(primes[1]);
-        HashTable doubleHashing = new DoubleHashing(primes[1]);
         Random r = new Random();
         for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
             HashObject tmp = new HashObject(r.nextInt());
@@ -56,8 +55,6 @@ public class HashtableTest {
     }
 
     private static void dateTest() {
-        HashTable linearProbing = new LinearProbing(primes[1]);
-        HashTable doubleHashing = new DoubleHashing(primes[1]);
         long current = new Date().getTime();
         for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
             Date date = new Date(current);
@@ -69,21 +66,56 @@ public class HashtableTest {
     }
 
     private static void stringTest() {
-        HashTable linearProbing = new LinearProbing(primes[1]);
-        HashTable doubleHashing = new DoubleHashing(primes[1]);
-
         Scanner scanner;
         try {
             scanner = new Scanner(new File("word-list.txt"));
         } catch (FileNotFoundException e) {
             return;
         }
-        for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
+
+        int linearDuplicateCount = 0;
+        int doubleDuplicateCount = 0;
+        while (linearProbing.getSize() < Math.ceil(primes[1] * loadFactor) && doubleHashing.getSize() < Math.ceil(primes[1] * loadFactor)) {
             String str = scanner.next();
             HashObject tmp = new HashObject(str);
-            linearProbing.insert(tmp);
-            doubleHashing.insert(tmp);
+            int res = linearProbing.insert(tmp);
+            if (res < 0) {
+                linearDuplicateCount++;
+            }
+
+            res = doubleHashing.insert(tmp);
+            if (res < 0) {
+                doubleDuplicateCount++;
+            }
         }
+
+        int elementCount = 0;
+        int probeCount = 0;
+        for (HashObject x : linearProbing.table) {
+            if (x == null) {
+                continue;
+            }
+            elementCount += x.getFrequencyCount();
+            probeCount += x.getProbeCount();
+        }
+        System.out.println("\tUsing Linear Probing");
+        System.out.printf("HashtableTest: size of hashtable is %d\n", linearProbing.getSize());
+        System.out.printf("\t Inserted %d elements, of which %d were duplicates\n", elementCount, linearDuplicateCount);
+        System.out.printf("\t Avg. no. of probes %.2f\n", (double) probeCount / linearProbing.getSize());
+        System.out.println();
+        elementCount = 0;
+        probeCount = 0;
+        for (HashObject x : doubleHashing.table) {
+            if (x == null) {
+                continue;
+            }
+            elementCount += x.getFrequencyCount();
+            probeCount += x.getProbeCount();
+        }
+        System.out.println("\tUsing Double Hashing");
+        System.out.printf("HashtableTest: size of hashtable is %d\n", doubleHashing.getSize());
+        System.out.printf("\t Inserted %d elements, of which %d were duplicates\n", elementCount, linearDuplicateCount);
+        System.out.printf("\t Avg. no. of probes %.2f\n", (double) probeCount / doubleHashing.getSize());
     }
 
     public static void main(String[] args) {
@@ -94,6 +126,9 @@ public class HashtableTest {
             System.exit(1);
         }
 
+        linearProbing = new LinearProbing(primes[1]);
+        doubleHashing = new DoubleHashing(primes[1]);
+
         System.out.printf("HashtableTest: Found a twin prime table capacity: %d\n", primes[1]);
         System.out.print("HashtableTest: Input: ");
         switch (dataSource) {
@@ -102,11 +137,11 @@ public class HashtableTest {
                 integerTest();
                 break;
             case 2:
-                System.out.println("Date objects");
+                System.out.printf("Date  Load factor: %.2f\n", loadFactor);
                 dateTest();
                 break;
             case 3:
-                System.out.println("String objects");
+                System.out.printf("Word-List  Load factor: %.2f\n", loadFactor);
                 stringTest();
                 break;
         }

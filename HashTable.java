@@ -2,8 +2,10 @@ import java.util.ArrayList;
 
 public abstract class HashTable {
     protected HashObject[] table;
+    private int size;
     public HashTable(int maxSize) {
         this.table = new HashObject[maxSize];
+        this.size = 0;
     }
     protected abstract int hash(HashObject x, int i);
 
@@ -27,9 +29,12 @@ public abstract class HashTable {
             int probe = hash(x, i);
             if (this.table[probe] == null) {
                 this.table[probe] = x;
+                this.size++;
+                this.table[probe].incrementProbeCount();
                 return probe;
             } else {
                 i++;
+                this.table[probe].incrementFrequencyCount();
             }
         } while (i == this.table.length);
         return -1;
@@ -42,4 +47,7 @@ public abstract class HashTable {
         return quotient;
     }
 
+    public int getSize() {
+        return size;
+    }
 }
