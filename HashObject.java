@@ -15,7 +15,7 @@ public class HashObject extends Object {
         return probeCount;
     }
 
-    public void incrementProbeCount(int probeCount) {
+    public void incrementProbeCount() {
         this.probeCount++;
     }
 
