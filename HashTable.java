@@ -36,8 +36,8 @@ public abstract class HashTable {
                     this.table[probe].incrementFrequencyCount();
                 } else {
                     this.table[probe].incrementProbeCount();
-                    i++;
                 }
+                i++;
             }
         } while (i < this.table.length);
         return -1;
