@@ -12,6 +12,7 @@ public class HashtableTest {
     static int[] primes;
     static HashTable linearProbing;
     static HashTable doubleHashing;
+    static int linearDuplicateCount, doubleDuplicateCount = 0;
     private static void handleArgsAndSetup(String[] args) {
         try { // TODO The program should, by default, use debug level 0 if the debug level wasn’t specified on the command line.
             dataSource = Integer.parseInt(args[0]);
@@ -45,50 +46,7 @@ public class HashtableTest {
         System.exit(1);
     }
 
-    private static void integerTest() {
-        Random r = new Random();
-        for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
-            HashObject tmp = new HashObject(r.nextInt());
-            linearProbing.insert(tmp);
-            doubleHashing.insert(tmp);
-        }
-    }
-
-    private static void dateTest() {
-        long current = new Date().getTime();
-        for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
-            Date date = new Date(current);
-            HashObject tmp = new HashObject(date);
-            linearProbing.insert(tmp);
-            doubleHashing.insert(tmp);
-            current += 1000;
-        }
-    }
-
-    private static void stringTest() {
-        Scanner scanner;
-        try {
-            scanner = new Scanner(new File("word-list.txt"));
-        } catch (FileNotFoundException e) {
-            return;
-        }
-
-        int linearDuplicateCount = 0;
-        int doubleDuplicateCount = 0;
-        while (linearProbing.getSize() < Math.ceil(primes[1] * loadFactor) && doubleHashing.getSize() < Math.ceil(primes[1] * loadFactor)) {
-            String str = scanner.next();
-            HashObject tmp = new HashObject(str);
-            int res = linearProbing.insert(tmp);
-            if (res < 0) {
-                linearDuplicateCount++;
-            }
-
-            res = doubleHashing.insert(tmp);
-            if (res < 0) {
-                doubleDuplicateCount++;
-            }
-        }
-
+    private static void printTestResults() {
         int elementCount = 0;
         int probeCount = 0;
         for (HashObject x : linearProbing.table) {
@@ -118,6 +76,49 @@ public class HashtableTest {
         System.out.printf("\t Avg. no. of probes %.2f\n", (double) probeCount / doubleHashing.getSize());
     }
 
+    private static void integerTest() {
+        Random r = new Random();
+        for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
+            HashObject tmp = new HashObject(r.nextInt());
+            linearProbing.insert(tmp);
+            doubleHashing.insert(tmp);
+        }
+    }
+
+    private static void dateTest() {
+        long current = new Date().getTime();
+        for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
+            Date date = new Date(current);
+            HashObject tmp = new HashObject(date);
+            linearProbing.insert(tmp);
+            doubleHashing.insert(tmp);
+            current += 1000;
+        }
+    }
+
+    private static void stringTest() {
+        Scanner scanner;
+        try {
+            scanner = new Scanner(new File("word-list.txt"));
+        } catch (FileNotFoundException e) {
+            return;
+        }
+
+        while (linearProbing.getSize() < Math.ceil(primes[1] * loadFactor) && doubleHashing.getSize() < Math.ceil(primes[1] * loadFactor)) {
+            String str = scanner.next();
+            HashObject tmp = new HashObject(str);
+            int res = linearProbing.insert(tmp);
+            if (res < 0) {
+                linearDuplicateCount++;
+            }
+
+            res = doubleHashing.insert(tmp);
+            if (res < 0) {
+                doubleDuplicateCount++;
+            }
+        }
+    }
+
     public static void main(String[] args) {
         handleArgsAndSetup(args);
 
@@ -145,5 +146,7 @@ public class HashtableTest {
                 stringTest();
                 break;
         }
+
+        printTestResults();
     }
 }
