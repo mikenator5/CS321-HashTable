@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class HashObject extends Object {
     Object key;
     int frequencyCount;
@@ -31,8 +33,11 @@ public class HashObject extends Object {
 
     @Override
     public boolean equals(Object obj) {
-        HashObject a = new HashObject(obj);
-        return this.key == a.key;
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        HashObject temp = (HashObject) obj;
+        return Objects.equals(this.key, temp.key);
     }
 
     @Override
