@@ -3,8 +3,16 @@ public class DoubleHashing extends HashTable{
         super(maxSize);
     }
 
+    private int h1(HashObject x) {
+        return positiveMod(x.hashCode(), this.table.length);
+    }
+
+    private int h2(HashObject x) {
+        return 1 + positiveMod (x.hashCode(), this.table.length - 2);
+    }
+
     @Override
     protected int hash(HashObject x, int i) {
-        return 1 + positiveMod(x.hashCode(), this.table.length - 2) % this.table.length;
+        return (h1(x) + (i * h2(x))) % this.table.length;
     }
 }
