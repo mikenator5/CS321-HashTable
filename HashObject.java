@@ -31,7 +31,8 @@ public class HashObject extends Object {
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        HashObject a = new HashObject(obj);
+        return this.key == a.key;
     }
 
     @Override

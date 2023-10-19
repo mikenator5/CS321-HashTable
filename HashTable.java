@@ -7,13 +7,13 @@ public abstract class HashTable {
         this.table = new HashObject[maxSize];
         this.size = 0;
     }
-    protected abstract int hash(HashObject x, int i);
+    protected abstract int hash(int x, int i);
 
     public HashObject search(HashObject k) {
         int i = 0;
         int probe;
         do {
-            probe = hash(k, i);
+            probe = hash(k.hashCode(), i);
             if (this.table[probe] == k) {
                 return this.table[probe];
             } else {
@@ -26,17 +26,20 @@ public abstract class HashTable {
     public int insert(HashObject x) {
         int i = 0;
         do {
-            int probe = hash(x, i);
+            int probe = hash(x.hashCode(), i);
             if (this.table[probe] == null) {
                 this.table[probe] = x;
                 this.size++;
-                this.table[probe].incrementProbeCount();
                 return probe;
             } else {
-                i++;
-                this.table[probe].incrementFrequencyCount();
+                if (this.table[probe].equals(x)) {
+                    this.table[probe].incrementFrequencyCount();
+                } else {
+                    this.table[probe].incrementProbeCount();
+                    i++;
+                }
             }
-        } while (i == this.table.length);
+        } while (i < this.table.length);
         return -1;
     }
 
