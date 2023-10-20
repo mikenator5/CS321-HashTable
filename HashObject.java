@@ -2,8 +2,8 @@ import java.util.Objects;
 
 public class HashObject extends Object {
     Object key;
-    int frequencyCount;
-    int probeCount;
+    private int frequencyCount;
+    private int probeCount;
 
     public int getFrequencyCount() {
         return frequencyCount;
