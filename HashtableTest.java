@@ -88,24 +88,47 @@ public class HashtableTest {
         }
     }
 
+    private static void handleLinearInsertResults(HashObject tmp, int results) {
+        if (results < 0) {
+            linearDuplicateCount++;
+            if (debugLevel > 1) {
+                System.out.printf("HashtableTest: Inserted '%s' with return code of %d\n", tmp, results);
+            }
+        }
+    }
+
+    private static void handleDoubleInsertResults(HashObject tmp, int results) {
+        if (results < 0) {
+            doubleDuplicateCount++;
+            if (debugLevel > 1) {
+                System.out.printf("HashtableTest: Inserted '%s' with return code of %d\n", tmp, results);
+            }
+        }
+    }
+
     private static void integerTest() {
         Random r = new Random();
         for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
             HashObject tmp1 = new HashObject(r.nextInt());
-            linearProbing.insert(tmp1);
+            int res = linearProbing.insert(tmp1);
+            handleLinearInsertResults(tmp1, res);
             HashObject tmp2 = new HashObject(r.nextInt());
-            doubleHashing.insert(tmp2);
+            res = doubleHashing.insert(tmp2);
+            handleDoubleInsertResults(tmp2, res);
         }
     }
+
 
     private static void dateTest() {
         long current = new Date().getTime();
         for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
             Date date = new Date(current);
             HashObject tmp1 = new HashObject(date);
-            linearProbing.insert(tmp1);
+            int res = linearProbing.insert(tmp1);
+            handleLinearInsertResults(tmp1, res);
             HashObject tmp2 = new HashObject(date);
-            doubleHashing.insert(tmp2);
+            res = doubleHashing.insert(tmp2);
+            handleDoubleInsertResults(tmp2, res);
             current += 1000;
         }
     }
@@ -123,15 +146,11 @@ public class HashtableTest {
             HashObject tmp1 = new HashObject(str);
 
             int res = linearProbing.insert(tmp1);
-            if (res < 0) {
-                linearDuplicateCount++;
-            }
+            handleLinearInsertResults(tmp1, res);
 
             HashObject tmp2 = new HashObject(str);
             res = doubleHashing.insert(tmp2);
-            if (res < 0) {
-                doubleDuplicateCount++;
-            }
+            handleDoubleInsertResults(tmp2, res);
         }
         scanner.close();
     }
