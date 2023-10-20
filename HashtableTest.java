@@ -72,7 +72,7 @@ public class HashtableTest {
         }
         System.out.println("\tUsing Double Hashing");
         System.out.printf("HashtableTest: size of hashtable is %d\n", doubleHashing.getSize());
-        System.out.printf("\t Inserted %d elements, of which %d were duplicates\n", elementCount, linearDuplicateCount);
+        System.out.printf("\t Inserted %d elements, of which %d were duplicates\n", elementCount, doubleDuplicateCount);
         System.out.printf("\t Avg. no. of probes %.2f\n", (double) probeCount / doubleHashing.getSize());
     }
 
@@ -106,17 +106,20 @@ public class HashtableTest {
 
         while (linearProbing.getSize() < Math.ceil(primes[1] * loadFactor) && doubleHashing.getSize() < Math.ceil(primes[1] * loadFactor)) {
             String str = scanner.next();
-            HashObject tmp = new HashObject(str);
-            int res = linearProbing.insert(tmp);
+            HashObject tmp1 = new HashObject(str);
+
+            int res = linearProbing.insert(tmp1);
             if (res < 0) {
                 linearDuplicateCount++;
             }
 
-            res = doubleHashing.insert(tmp);
+            HashObject tmp2 = new HashObject(str);
+            res = doubleHashing.insert(tmp2);
             if (res < 0) {
                 doubleDuplicateCount++;
             }
         }
+        scanner.close();
     }
 
     public static void main(String[] args) {
