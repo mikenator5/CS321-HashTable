@@ -10,18 +10,18 @@ public abstract class HashTable {
     }
     protected abstract int hash(int x, int i);
 
-    public HashObject search(HashObject k) {
+    public int search(HashObject k) {
         int i = 0;
         int probe;
         do {
-            probe = hash(k.hashCode(), i);
-            if (this.table[probe] == k) {
-                return this.table[probe];
+            probe = hash(k.key.hashCode(), i);
+            if (this.table[probe].equals(k)) {
+                return probe;
             } else {
                 i++;
             }
-        } while (i == this.table.length || this.table[probe] == null);
-        return null;
+        } while (this.table[probe] == null || i == this.table.length);
+        return -1;
     }
 
     public int insert(HashObject x) {
