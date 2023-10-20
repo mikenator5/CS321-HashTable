@@ -33,6 +33,8 @@ dos2unix test-cases/* >& /dev/null
 debugLevel=1
 load=0.5
 
+for load in 0.5 0.6 0.7 0.8 0.9 0.95 0.99
+do
 echo "Running java HashtableTest dataSource = 3 loadFactor = $load "
 java HashtableTest 3 $load $debugLevel  >> /dev/null
 dos2unix linear-dump.txt double-dump.txt  >& /dev/null
@@ -58,3 +60,7 @@ else
 	echo "       Check the file diff-double-$load.out for differences"
 fi
 echo
+
+done
+
+rm linear-dump.txt double-dump.txt
