@@ -26,7 +26,7 @@ public abstract class HashTable {
     public int insert(HashObject x) {
         int i = 0;
         do {
-            int probe = hash(x.hashCode(), i);
+            int probe = hash(x.key.hashCode(), i);
             if (this.table[probe] == null) {
                 this.table[probe] = x;
                 this.size++;
