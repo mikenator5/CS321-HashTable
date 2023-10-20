@@ -66,6 +66,7 @@ public class HashtableTest {
         System.out.printf("\t Avg. no. of probes %.2f\n", (double) probeCount / linearProbing.getSize());
         if (debugLevel > 0) {
             linearProbing.dumpToFile("linear-dump.txt");
+            System.out.println("HashtableTest: Saved dump of hash table");
         }
         System.out.println();
         elementCount = 0;
@@ -83,6 +84,7 @@ public class HashtableTest {
         System.out.printf("\t Avg. no. of probes %.2f\n", (double) probeCount / doubleHashing.getSize());
         if (debugLevel > 0) {
             doubleHashing.dumpToFile("double-dump.txt");
+            System.out.println("HashtableTest: Saved dump of hash table");
         }
     }
 
@@ -115,7 +117,7 @@ public class HashtableTest {
         }
 
         while (linearProbing.getSize() < Math.ceil(primes[1] * loadFactor) && doubleHashing.getSize() < Math.ceil(primes[1] * loadFactor)) {
-            String str = scanner.next();
+            String str = scanner.nextLine();
             HashObject tmp1 = new HashObject(str);
 
             int res = linearProbing.insert(tmp1);
