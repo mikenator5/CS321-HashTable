@@ -30,7 +30,7 @@ public class HashtableTest {
             } else {
                 debugLevel = 0;
             }
-        } catch (NumberFormatException e) {
+        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
             printUsageAndExit();
         }
     }
