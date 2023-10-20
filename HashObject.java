@@ -17,14 +17,14 @@ public class HashObject extends Object {
         return probeCount;
     }
 
-    public void incrementProbeCount() {
-        this.probeCount++;
+    public void incrementProbeCount(int i) {
+        this.probeCount = this.probeCount + i;
     }
 
     public HashObject(Object key) {
         this.key = key;
         this.frequencyCount = 0;
-        this.probeCount = 0;
+        this.probeCount = 1;
     }
 
     public Object getKey() {

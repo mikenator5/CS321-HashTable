@@ -30,16 +30,18 @@ public abstract class HashTable {
             int probe = hash(x.key.hashCode(), i);
             if (this.table[probe] == null) {
                 this.table[probe] = x;
+                this.table[probe].incrementFrequencyCount();
+                this.table[probe].incrementProbeCount(i);
                 this.size++;
                 return probe;
-            } else {
-                if (this.table[probe].equals(x)) {
-                    this.table[probe].incrementFrequencyCount();
-                } else {
-                    this.table[probe].incrementProbeCount();
-                }
-                i++;
             }
+            if (this.table[probe].equals(x)) {
+                this.table[probe].incrementFrequencyCount();
+                return -1;
+            }
+
+            i++;
+
         } while (i < this.table.length);
         return -1;
     }
