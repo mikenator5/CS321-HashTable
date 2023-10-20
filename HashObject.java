@@ -42,10 +42,6 @@ public class HashObject extends Object {
 
     @Override
     public String toString() {
-        return "HashObject{" +
-                "key=" + key +
-                ", frequencyCount=" + frequencyCount +
-                ", probeCount=" + probeCount +
-                '}';
+        return this.key + " " + this.getFrequencyCount() + " " + this.getProbeCount();
     }
 }

@@ -14,7 +14,7 @@ public class HashtableTest {
     static HashTable doubleHashing;
     static int linearDuplicateCount, doubleDuplicateCount = 0;
     private static void handleArgsAndSetup(String[] args) {
-        try { // TODO The program should, by default, use debug level 0 if the debug level wasn’t specified on the command line.
+        try {
             dataSource = Integer.parseInt(args[0]);
             if (dataSource < 0 || dataSource > 3) {
                 printUsageAndExit();
@@ -22,9 +22,13 @@ public class HashtableTest {
 
             loadFactor = Double.parseDouble(args[1]);
 
-            debugLevel = Integer.parseInt(args[2]);
-            if (debugLevel < 0 || debugLevel > 2) {
-                printUsageAndExit();
+            if (args.length > 2) {
+                debugLevel = Integer.parseInt(args[2]);
+                if (debugLevel < 0 || debugLevel > 2) {
+                    printUsageAndExit();
+                }
+            } else {
+                debugLevel = 0;
             }
         } catch (NumberFormatException e) {
             printUsageAndExit();
@@ -60,6 +64,9 @@ public class HashtableTest {
         System.out.printf("HashtableTest: size of hashtable is %d\n", linearProbing.getSize());
         System.out.printf("\t Inserted %d elements, of which %d were duplicates\n", elementCount, linearDuplicateCount);
         System.out.printf("\t Avg. no. of probes %.2f\n", (double) probeCount / linearProbing.getSize());
+        if (debugLevel > 0) {
+            linearProbing.dumpToFile("linear-dump.txt");
+        }
         System.out.println();
         elementCount = 0;
         probeCount = 0;
@@ -74,6 +81,9 @@ public class HashtableTest {
         System.out.printf("HashtableTest: size of hashtable is %d\n", doubleHashing.getSize());
         System.out.printf("\t Inserted %d elements, of which %d were duplicates\n", elementCount, doubleDuplicateCount);
         System.out.printf("\t Avg. no. of probes %.2f\n", (double) probeCount / doubleHashing.getSize());
+        if (debugLevel > 0) {
+            doubleHashing.dumpToFile("double-dump.txt");
+        }
     }
 
     private static void integerTest() {

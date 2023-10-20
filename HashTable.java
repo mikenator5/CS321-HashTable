@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 public abstract class HashTable {
     protected HashObject[] table;
@@ -52,5 +53,23 @@ public abstract class HashTable {
 
     public int getSize() {
         return size;
+    }
+
+    public void dumpToFile(String fileName) {
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(fileName);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        for (int i = 0; i < this.table.length; i++) {
+            if (this.table[i] == null) {
+                continue;
+            }
+            HashObject a = this.table[i];
+            out.printf("table[%d]: %s\n", i, a.toString());
+        }
+        out.close();
     }
 }
