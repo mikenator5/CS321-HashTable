@@ -89,7 +89,7 @@ public class HashtableTest {
     private static void integerTest() {
         Random r = new Random();
         for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
-            HashObject tmp = new HashObject(r.nextInt());
+            HashObject tmp = new HashObject(r.nextInt()); // Todo make two unique objects from nextInt
             linearProbing.insert(tmp);
             doubleHashing.insert(tmp);
         }
@@ -99,7 +99,7 @@ public class HashtableTest {
         long current = new Date().getTime();
         for (int i = 0; i < Math.ceil(primes[1] * loadFactor); i++) {
             Date date = new Date(current);
-            HashObject tmp = new HashObject(date);
+            HashObject tmp = new HashObject(date); // Todo Make two unique objects from date
             linearProbing.insert(tmp);
             doubleHashing.insert(tmp);
             current += 1000;
